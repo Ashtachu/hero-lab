@@ -1,0 +1,428 @@
+/* Hero Lab | cohesive learning workspace, November 2026.
+   One visual surface, one hero switcher, useful content before metadata.
+   Keep role-first onboarding and mobile bottom navigation unchanged. */
+:root {
+  --hl-ink:#243d34;
+  --hl-muted:#536a5e;
+  --hl-border:#ceded1;
+  --hl-surface:#fffdf8;
+  --hl-accent:#34735a;
+  --hl-accent-soft:#e4f2e6;
+  --hl-lilac:#f3edf9;
+}
+body:not(.launch-mode){
+  background:linear-gradient(145deg,#f5f4e9 0%,#eef4e9 58%,#f6f2e9 100%);
+  color:var(--hl-ink);
+}
+body:not(.launch-mode) .app-shell{
+  max-width:1520px;
+  grid-template-columns:210px minmax(0,1fr);
+  gap:20px;
+  padding:14px 24px 30px;
+}
+body:not(.launch-mode) .main{
+  min-width:0;
+  width:100%;
+  max-width:1110px;
+  margin:0 auto;
+}
+/* Consolidate the page into a single, coherent working area. */
+body:not(.launch-mode) .main > .topbar{
+  width:min(100%,1080px);
+  max-width:1080px;
+  box-sizing:border-box;
+  height:auto;
+  min-height:76px;
+  margin:24px auto 12px;
+  padding:12px 18px;
+  position:sticky;
+  top:12px;
+  display:flex;
+  flex-wrap:nowrap;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  border:1.5px solid var(--hl-border);
+  border-radius:19px;
+  background:rgba(255,253,248,.97);
+  box-shadow:0 7px 22px rgba(46,78,58,.08);
+  backdrop-filter:blur(12px);
+  z-index:19;
+}
+body:not(.launch-mode) .main > .topbar > div:first-child{
+  flex:0 1 265px;
+  min-width:150px;
+  max-width:290px;
+}
+body:not(.launch-mode) .topbar h2{
+  font-size:19px;
+  line-height:1.15;
+  letter-spacing:-.02em;
+  color:var(--hl-ink);
+}
+body:not(.launch-mode) .topbar p{font-size:11px;margin:3px 0 0;color:var(--hl-muted)}
+body:not(.launch-mode) #hero-switch-top.hero-switch-top{
+  display:inline-flex;
+  margin:5px 0 0;
+  padding:5px 10px;
+  min-height:33px;
+  border-radius:11px;
+  font-size:12px;
+  color:#22563f;
+  background:var(--hl-accent-soft);
+}
+body:not(.launch-mode) #hero-switch-top[hidden]{display:none!important}
+body:not(.launch-mode) .topbar-actions{
+  flex:1 1 auto;
+  display:flex;
+  flex-wrap:nowrap;
+  justify-content:flex-end;
+  align-items:center;
+  gap:7px;
+  min-width:0;
+  margin:0;
+}
+body:not(.launch-mode) .topbar-actions .search-wrap{
+  flex:1 1 135px;
+  width:auto;
+  min-width:100px;
+  max-width:230px;
+  height:41px;
+  border-radius:12px;
+  background:#fff;
+  border:1.5px solid #c8dacc;
+}
+body:not(.launch-mode) .topbar-actions #hero-follow-trigger{
+  height:41px;
+  padding:0 11px;
+  font-size:12px;
+  border-radius:12px;
+}
+body:not(.launch-mode) .topbar-actions .icon-btn{width:41px;height:41px;border-radius:12px;flex:0 0 41px}
+/* Put Search & Tools where the other actions live, not over content. */
+#power-open.hl-tools-inline{
+  position:static;
+  inset:auto;
+  z-index:auto;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-height:41px;
+  flex:0 0 auto;
+  padding:7px 12px;
+  border-radius:12px;
+  border:1.5px solid #2f6d56;
+  background:#2f6d56;
+  color:#fff!important;
+  font-size:12px;
+  font-weight:850;
+  box-shadow:none;
+  white-space:nowrap;
+}
+#power-open.hl-tools-inline:hover{background:#255a46}
+#power-open.hl-tools-inline:focus-visible{outline:3px solid #8dc6a8;outline-offset:2px}
+/* Left dock stays centered, but occupies less attention than actual learning. */
+body:not(.launch-mode) .sidebar{
+  width:192px;
+  padding:11px;
+  gap:10px;
+  border:1.5px solid var(--hl-border);
+  border-radius:21px;
+  background:rgba(255,253,248,.96);
+  box-shadow:0 8px 24px rgba(49,80,63,.08);
+}
+body:not(.launch-mode) .sidebar .brand h1{font-size:16px}
+body:not(.launch-mode) .sidebar .brand p{font-size:10px}
+body:not(.launch-mode) .sidebar .nav{gap:5px}
+body:not(.launch-mode) .sidebar .nav-btn{
+  min-height:44px;
+  border-radius:12px;
+  font-size:13px;
+  font-weight:750;
+  color:#375447;
+}
+body:not(.launch-mode) .sidebar .nav-btn:hover,
+body:not(.launch-mode) .sidebar .nav-btn.active{
+  background:var(--hl-accent-soft);
+  color:#244a38;
+}
+/* Remove excess blank gutters between header, hero, and primary choices. */
+body:not(.launch-mode) .view.active:not(#launch-view){
+  box-sizing:border-box;
+  max-width:1100px;
+  margin:0 auto;
+  padding:8px 8px 70px;
+}
+body:not(.launch-mode) #hero-detail-view #back-to-heroes{display:none!important}
+body:not(.launch-mode) #hero-detail{
+  display:flex;
+  flex-direction:column;
+  gap:13px;
+  width:100%;
+  max-width:1080px;
+  margin:0 auto;
+}
+/* Primary action first: overview > goals > reliability detail > reference. */
+body:not(.launch-mode) #hero-detail > .hero-calm-header{order:0}
+body:not(.launch-mode) #hero-detail > .calm-troubleshooter{order:1}
+body:not(.launch-mode) #hero-detail > #trust-hero-card{order:2}
+body:not(.launch-mode) #hero-detail > .full-reference{order:3}
+body:not(.launch-mode) #hero-detail > :not(.hero-calm-header):not(.calm-troubleshooter):not(#trust-hero-card):not(.full-reference){order:4}
+/* A compact, high-contrast hero snapshot instead of a second giant page header. */
+body:not(.launch-mode) .hero-calm-header{
+  padding:18px 20px;
+  margin:0;
+  border:1px solid #c5d9ca;
+  border-radius:21px;
+  background:linear-gradient(111deg,#f3faef 0%,#fffdf8 64%,#f5f0fc 100%);
+  box-shadow:0 3px 12px rgba(53,88,63,.045);
+}
+body:not(.launch-mode) .hero-calm-top{gap:12px;align-items:flex-start}
+body:not(.launch-mode) .hero-calm-top > div:first-child{
+  display:grid;
+  grid-template-columns:minmax(200px,1fr) minmax(300px,1.4fr);
+  grid-template-rows:auto auto auto;
+  gap:5px 16px;
+  flex:1 1 auto;
+  min-width:0;
+}
+body:not(.launch-mode) .hero-calm-name{grid-column:1;grid-row:1;gap:9px}
+body:not(.launch-mode) .hero-calm-name h2{
+  font-size:clamp(28px,3vw,35px);
+  letter-spacing:-.035em;
+  line-height:1.08;
+  color:#244536;
+}
+body:not(.launch-mode) .hero-calm-job{
+  grid-column:1;
+  grid-row:2;
+  margin:3px 0 0;
+  max-width:360px;
+  color:#4c6658;
+  font-size:13px;
+  line-height:1.4;
+}
+body:not(.launch-mode) .hero-calm-tags{
+  grid-column:1;
+  grid-row:3;
+  gap:5px;
+  margin-top:8px;
+}
+body:not(.launch-mode) .hero-calm-tags span{font-size:10px;padding:5px 8px}
+body:not(.launch-mode) .hero-trust-strip{
+  grid-column:2;
+  grid-row:1 / span 3;
+  align-self:center;
+  margin:0;
+  padding:10px 12px;
+  border:1px solid #d3e3d4;
+  border-radius:13px;
+  background:#fffefa;
+}
+body:not(.launch-mode) .hero-trust-meta{gap:7px}
+body:not(.launch-mode) .hero-trust-item{padding-right:7px}
+body:not(.launch-mode) .hero-trust-item span{font-size:10px;line-height:1.25}
+body:not(.launch-mode) .hero-trust-item strong{font-size:11px;line-height:1.35}
+body:not(.launch-mode) .hero-trust-status{font-size:10px;padding-top:7px;margin-top:7px}
+body:not(.launch-mode) .hero-context{min-width:130px;max-width:175px;align-self:flex-start}
+body:not(.launch-mode) .hero-context>summary{
+  text-align:right;
+  font-size:11px;
+  color:#365b48!important;
+  text-decoration:underline;
+  text-underline-offset:3px;
+  padding:8px 0;
+}
+/* Learning route is a first-class workspace, not the fifth card down the page. */
+body:not(.launch-mode) .calm-troubleshooter{
+  padding:20px 22px 22px;
+  margin:0;
+  border:1.5px solid #cbdccf;
+  border-radius:21px;
+  background:var(--hl-surface);
+  box-shadow:0 5px 20px rgba(48,83,62,.06);
+}
+body:not(.launch-mode) .calm-question-head{max-width:none}
+body:not(.launch-mode) .calm-question-head h3{
+  font-size:clamp(22px,2.5vw,28px);
+  color:#294735;
+  line-height:1.2;
+  margin:5px 0;
+}
+body:not(.launch-mode) .calm-question-head p{font-size:13px;color:#526b5e}
+body:not(.launch-mode) .goal-picker{
+  grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  max-width:none!important;
+  margin-inline:0!important;
+  gap:9px;
+  margin-top:15px;
+}
+body:not(.launch-mode) .goal-btn{
+  min-height:94px!important;
+  align-items:center;
+  padding:13px 14px!important;
+  border:1.5px solid #d7e5d9;
+  border-radius:14px;
+  background:#fbfdf8;
+  box-shadow:0 2px 6px rgba(49,80,63,.025);
+}
+body:not(.launch-mode) .goal-btn:hover{
+  background:#eaf6eb;
+  border-color:#84b79a;
+  transform:translateY(-1px);
+}
+body:not(.launch-mode) .goal-btn:focus-visible{outline:3px solid #83bba2;outline-offset:2px}
+body:not(.launch-mode) .goal-btn strong{font-size:14px!important;color:#294b39}
+body:not(.launch-mode) .goal-btn small{font-size:11px!important;line-height:1.4;color:#516e60}
+body:not(.launch-mode) .goal-btn .goal-icon{width:38px;height:38px;border-radius:12px}
+/* Patch provenance remains available in full, but no longer blocks the learning route. */
+body:not(.launch-mode) #trust-hero-card{
+  margin:0;
+  padding:17px 19px;
+  border:1px solid #cedfd0;
+  border-radius:19px;
+  background:#fffefa;
+  box-shadow:none;
+}
+body:not(.launch-mode) #trust-hero-card .trust-heading{font-size:16px;color:#2a4a39}
+body:not(.launch-mode) #trust-hero-card .trust-subheading{font-size:12px}
+body:not(.launch-mode) #trust-hero-card .trust-fields{margin-top:10px;gap:8px}
+body:not(.launch-mode) #trust-hero-card .trust-field{padding:9px 11px;background:#f7faf5}
+body:not(.launch-mode) #trust-hero-card .trust-field span{font-size:10px}
+body:not(.launch-mode) #trust-hero-card .trust-field strong{font-size:12px;margin-top:4px}
+body:not(.launch-mode) #trust-hero-card .trust-field small{font-size:10px}
+body:not(.launch-mode) .full-reference{margin:0}
+body:not(.launch-mode) .full-reference>summary{padding:15px 18px}
+@media (min-width:681px) and (max-width:1100px){
+  body:not(.launch-mode) .app-shell{grid-template-columns:83px minmax(0,1fr);gap:12px;padding:12px 14px}
+  body:not(.launch-mode) .sidebar{left:10px;width:65px;padding:9px 6px}
+  body:not(.launch-mode) .hero-calm-top > div:first-child{grid-template-columns:1fr;grid-template-rows:auto auto auto auto}
+  body:not(.launch-mode) .hero-calm-name{grid-column:1;grid-row:1}
+  body:not(.launch-mode) .hero-calm-job{grid-column:1;grid-row:2}
+  body:not(.launch-mode) .hero-calm-tags{grid-column:1;grid-row:3}
+  body:not(.launch-mode) .hero-trust-strip{grid-column:1;grid-row:4;margin-top:7px}
+  body:not(.launch-mode) .hero-context{min-width:105px}
+  body:not(.launch-mode) .goal-picker{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  body:not(.launch-mode) .main > .topbar{margin-top:26px;padding:11px 13px;gap:9px}
+  body:not(.launch-mode) .main > .topbar > div:first-child{flex-basis:170px;min-width:110px}
+  body:not(.launch-mode) .topbar-actions{gap:5px}
+  body:not(.launch-mode) .topbar-actions .search-wrap{min-width:80px;flex-basis:90px}
+  #power-open.hl-tools-inline{padding:7px 9px}
+}
+@media (max-width:680px){
+  body:not(.launch-mode) .app-shell{display:block;padding:0;max-width:none}
+  body:not(.launch-mode) .main{max-width:none;margin:0}
+  body:not(.launch-mode) .main > .topbar{
+    width:auto;
+    height:auto;
+    min-height:0;
+    margin:max(12px,env(safe-area-inset-top)) 12px 9px;
+    padding:11px 12px;
+    top:max(8px,env(safe-area-inset-top));
+    gap:0;
+    flex-wrap:wrap;
+    border-radius:17px;
+    box-shadow:0 4px 13px rgba(40,74,52,.08);
+  }
+  body:not(.launch-mode) .main > .topbar > div:first-child{
+    flex:1 1 100%;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:7px;
+    min-width:0;
+    max-width:none;
+  }
+  body:not(.launch-mode) .topbar h2{font-size:18px}
+  body:not(.launch-mode) .topbar p{display:none}
+  body:not(.launch-mode) #hero-switch-top.hero-switch-top{margin:0;font-size:11px;min-height:34px;padding:5px 8px}
+  body:not(.launch-mode) .topbar-actions{
+    flex:1 1 100%;
+    display:grid;
+    grid-template-columns:minmax(0,1fr) auto auto auto;
+    justify-content:stretch;
+    gap:5px;
+    margin-top:8px;
+    width:100%;
+    min-width:0;
+  }
+  body:not(.launch-mode) .topbar-actions .search-wrap{
+    min-width:0;width:100%;max-width:none;
+    height:39px;padding:0 8px;
+  }
+  body:not(.launch-mode) .topbar-actions #hero-follow-trigger{
+    height:39px;min-width:58px;padding:0 8px;font-size:0;border-radius:10px;
+  }
+  body:not(.launch-mode) .topbar-actions #hero-follow-trigger::before{font-size:11px}
+  body:not(.launch-mode) .topbar-actions .icon-btn{width:39px;height:39px;min-width:39px;border-radius:10px}
+  #power-open.hl-tools-inline{height:39px;min-height:39px;padding:6px 9px;font-size:11px;border-radius:10px}
+  body:not(.launch-mode) .view.active:not(#launch-view){padding:4px 12px 110px}
+  body:not(.launch-mode) #hero-detail{gap:10px}
+  body:not(.launch-mode) .hero-calm-header{padding:14px 15px;border-radius:17px}
+  body:not(.launch-mode) .hero-calm-top{display:block}
+  body:not(.launch-mode) .hero-calm-top > div:first-child{
+    display:grid;
+    grid-template-columns:minmax(0,1fr);
+    grid-template-rows:auto auto auto auto;
+    gap:7px;
+  }
+  body:not(.launch-mode) .hero-calm-name{grid-column:1;grid-row:1}
+  body:not(.launch-mode) .hero-calm-name h2{font-size:29px}
+  body:not(.launch-mode) .hero-calm-job{grid-column:1;grid-row:2;margin:0;font-size:12px}
+  body:not(.launch-mode) .hero-calm-tags{grid-column:1;grid-row:3;margin:0}
+  body:not(.launch-mode) .hero-trust-strip{
+    grid-column:1;grid-row:4;
+    margin-top:3px;padding:9px 10px;
+    background:#fffefa;
+  }
+  body:not(.launch-mode) .hero-trust-meta{
+    display:grid;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:6px;
+  }
+  body:not(.launch-mode) .hero-trust-item{padding:0 5px 0 0;border-bottom:0;border-right:1px solid #dce6dd}
+  body:not(.launch-mode) .hero-trust-item:last-child{border-right:0;padding-right:0}
+  body:not(.launch-mode) .hero-trust-item span{font-size:9px;margin-bottom:3px}
+  body:not(.launch-mode) .hero-trust-item strong{font-size:10px;line-height:1.25;overflow-wrap:anywhere}
+  body:not(.launch-mode) .hero-trust-status{font-size:10px;margin-top:7px;padding-top:6px}
+  body:not(.launch-mode) .hero-context{max-width:none;margin-top:7px}
+  body:not(.launch-mode) .hero-context>summary{text-align:left;padding:2px 0}
+  body:not(.launch-mode) .calm-troubleshooter{padding:16px 14px 17px;border-radius:18px}
+  body:not(.launch-mode) .calm-question-head h3{font-size:22px}
+  body:not(.launch-mode) .calm-question-head p{font-size:12px}
+  body:not(.launch-mode) .goal-picker{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px;margin-top:13px}
+  body:not(.launch-mode) .goal-btn{
+    min-height:96px!important;gap:8px;padding:10px!important;border-radius:13px;
+    align-items:flex-start;
+  }
+  body:not(.launch-mode) .goal-btn .goal-icon{width:30px;height:30px;min-width:30px;font-size:16px;border-radius:10px}
+  body:not(.launch-mode) .goal-btn strong{font-size:13px!important}
+  body:not(.launch-mode) .goal-btn small{font-size:10px!important;line-height:1.3}
+  body:not(.launch-mode) #trust-hero-card{padding:13px;border-radius:16px}
+  body:not(.launch-mode) #trust-hero-card .trust-fields{grid-template-columns:1fr;gap:6px}
+  body:not(.launch-mode) #trust-hero-card .trust-field{padding:8px 10px}
+  body:not(.launch-mode) #trust-hero-card .trust-field strong{font-size:12px}
+  /* Existing bottom nav stays usable, not covered by any floating tools button. */
+  body:not(.launch-mode) .sidebar{width:auto;padding:8px 10px}
+}
+@media (max-width:350px){
+  body:not(.launch-mode) .topbar-actions #hero-follow-trigger{min-width:52px;padding:0 5px}
+  #power-open.hl-tools-inline{padding:5px 7px}
+  body:not(.launch-mode) .goal-picker{grid-template-columns:1fr!important}
+  body:not(.launch-mode) .goal-btn{min-height:68px}
+}
+@media (prefers-reduced-motion:reduce){
+  body:not(.launch-mode) .goal-btn{transition:none}
+}
+/* Balanced second row: five routes fill the panel without an empty placeholder. */
+@media(min-width:1101px){
+  body:not(.launch-mode) .goal-picker{grid-template-columns:repeat(6,minmax(0,1fr))!important}
+  body:not(.launch-mode) .goal-picker > .goal-btn{grid-column:span 2}
+  body:not(.launch-mode) .goal-picker > .goal-btn:nth-child(4),
+  body:not(.launch-mode) .goal-picker > .goal-btn:nth-child(5){grid-column:span 3}
+}
+body:not(.launch-mode) .goal-picker > .goal-btn:nth-child(4){background:#f9f6fd;border-color:#e2d7eb}
+body:not(.launch-mode) .goal-picker > .goal-btn:nth-child(5){background:#f1f8f1;border-color:#cde0cf}
+@media (min-width:351px) and (max-width:1100px){
+  body:not(.launch-mode) .goal-picker > .goal-btn:nth-child(5){grid-column:1/-1}
+}

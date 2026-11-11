@@ -267,7 +267,7 @@ class BrowserJourneys(unittest.TestCase):
                 page = self.open_page(device)
                 self.open_hero(page, 'Mizuki', 'Support')
                 self.assertTrue(page.locator('#hero-switch-top').is_visible())
-                page.locator('#back-to-heroes').click()
+                page.locator('#hero-switch-top').click()
                 self.assertTrue(page.locator('#hero-switch-dialog').is_visible())
                 self.assertEqual(page.locator('.hero-switch-role.is-active').inner_text(), 'Support')
                 self.assertTrue(page.locator('#hero-switch-search').evaluate('(el) => document.activeElement === el'))
@@ -281,7 +281,7 @@ class BrowserJourneys(unittest.TestCase):
                 page.locator('#hero-switch-search').fill('Genji')
                 page.locator('button[data-hero-name="Genji"]').click()
                 self.assertEqual(page.locator('#hero-detail .hero-calm-name h2').inner_text(), 'Genji')
-                page.locator('#back-to-heroes').click()
+                page.locator('#hero-switch-top').click()
                 page.keyboard.press('Escape')
                 self.assertTrue(page.locator('#hero-switch-dialog').is_hidden())
                 self.assertEqual(page.locator('#hero-detail .hero-calm-name h2').inner_text(), 'Genji')
@@ -295,7 +295,7 @@ class BrowserJourneys(unittest.TestCase):
                 page.locator('[data-help-group="practice"]').click()
                 self.assertGreater(page.locator('[data-practice-task]').count(), 0)
                 page.locator('[data-practice-task]').first.check()
-                page.locator('#back-to-heroes').click()
+                page.locator('#hero-switch-top').click()
                 page.locator('#hero-switch-search').fill('not-a-real-hero')
                 self.assertIn('No heroes match', page.locator('#hero-switch-results').inner_text())
                 page.locator('#hero-switch-close').click()
@@ -303,7 +303,7 @@ class BrowserJourneys(unittest.TestCase):
                 page.locator('#hero-switch-top').click()
                 page.locator('#hero-switch-search').fill('Juno')
                 page.locator('button[data-hero-name="Juno"]').click()
-                page.locator('#back-to-heroes').click()
+                page.locator('#hero-switch-top').click()
                 page.locator('#hero-switch-search').fill('Mizuki')
                 page.locator('button[data-hero-name="Mizuki"]').click()
                 page.locator('[data-help-group="practice"]').click()
@@ -390,11 +390,11 @@ class BrowserJourneys(unittest.TestCase):
                     self.assertGreaterEqual(b['left'], h['left'] - 3)
                     self.assertLessEqual(b['right'], h['right'] + 3)
                 if device == 'desktop':
-                    self.assertGreater(h['top'], 50)
+                    self.assertGreater(h['top'], 20)
                     self.assertLess(h['top'], 160)
-                    self.assertLess(h['width'], 970)
+                    self.assertLessEqual(h['width'], 1100)
                 else:
-                    self.assertGreaterEqual(h['top'], 15)
+                    self.assertGreaterEqual(h['top'], 8)
                     self.assertLess(h['top'], 60)
                     self.assertLess(h['height'], 190)
                 page.locator('#hero-switch-top').click()
@@ -423,6 +423,58 @@ class BrowserJourneys(unittest.TestCase):
         self.assertTrue(page.locator('#hero-switch-dialog').is_visible())
         page.keyboard.press('Escape')
         self.assertTrue(page.locator('#hero-switch-dialog').is_hidden())
+
+    def test_workspace_density_and_single_navigation_actions(self):
+        """Goal choices lead; no mobile tool overlap or duplicate hero switcher."""
+        for device in DEVICES:
+            with self.subTest(device=device):
+                page = self.open_page(device)
+                self.open_hero(page)
+                self.assertTrue(page.locator('#hero-switch-top').is_visible())
+                self.assertFalse(page.locator('#back-to-heroes').is_visible())
+                self.assertTrue(page.locator('#power-open').is_visible())
+                metrics = page.evaluate("""() => {
+                    const b = s => {
+                        const r=document.querySelector(s).getBoundingClientRect();
+                        return {top:r.top,bottom:r.bottom,left:r.left,right:r.right,height:r.height,width:r.width};
+                    };
+                    return {
+                        header:b('.main > .topbar'),
+                        hero:b('.hero-calm-header'),
+                        goal:b('.calm-troubleshooter'),
+                        firstGoal:b('.goal-btn'),
+                        trust:b('#trust-hero-card'),
+                        floating:b('#power-open'),
+                        docWidth:document.documentElement.scrollWidth,
+                        viewport:innerWidth,
+                        toolsInsideTopbar:document.querySelector('#power-open').closest('.topbar-actions')!==null,
+                        gridCount:getComputedStyle(document.querySelector('#goal-picker')).gridTemplateColumns.split(' ').length
+                    };
+                }""")
+                self.assertTrue(metrics['toolsInsideTopbar'])
+                self.assertLess(metrics['hero']['bottom'], metrics['goal']['top'] + 3)
+                self.assertLess(metrics['goal']['bottom'], metrics['trust']['top'] + 3)
+                self.assertLessEqual(metrics['docWidth'], metrics['viewport'] + 2)
+                self.assertGreaterEqual(metrics['floating']['left'], metrics['header']['left'] - 2)
+                self.assertLessEqual(metrics['floating']['right'], metrics['header']['right'] + 2)
+                if device == 'desktop':
+                    self.assertLess(metrics['firstGoal']['top'], 450)
+                    self.assertEqual(metrics['gridCount'], 6)
+                else:
+                    self.assertLess(metrics['firstGoal']['top'], 620)
+                    self.assertEqual(metrics['gridCount'], 2)
+                page.locator('#power-open').click()
+                self.assertTrue(page.locator('#tools-view.active').is_visible())
+
+        for width in (320, 768, 1024):
+            with self.subTest(width=width):
+                context = self.browser.new_context(viewport={'width':width,'height':850},reduced_motion='reduce')
+                self.addCleanup(context.close)
+                page = self.open_page('desktop', context=context)
+                self.open_hero(page)
+                self.assertLessEqual(page.evaluate('document.documentElement.scrollWidth'), width + 2)
+                self.assertTrue(page.locator('#hero-switch-top').is_visible())
+                self.assertTrue(page.locator('#power-open').is_visible())
 
 
 if __name__ == '__main__':

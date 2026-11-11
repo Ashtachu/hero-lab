@@ -223,6 +223,11 @@ def write_site(db):
     # Preserve the lower, centered floating header on each automated patch rebuild.
     if 'id="compact-topbar-styles"' not in updated:
         updated=updated.replace('</head>', '<link id="compact-topbar-styles" rel="stylesheet" href="./compact-topbar.css">\n</head>', 1)
+    # Cohesive hero workspace stylesheet and toolbar placement are rebuilt with the snapshot.
+    if 'id="workspace-v2-styles"' not in updated:
+        updated=updated.replace('</head>', '<link id="workspace-v2-styles" rel="stylesheet" href="./workspace-v2.css">\n</head>', 1)
+    if 'id="workspace-v2-script"' not in updated:
+        updated=updated.replace('</body>', '<script id="workspace-v2-script" src="./workspace-v2.js" defer></script>\n</body>', 1)
     path.write_text(updated)
 
 def main():
