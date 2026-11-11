@@ -50,3 +50,7 @@ The official source is `https://overwatch.blizzard.com/en-us/news/patch-notes/`.
 ## Switching heroes without restarting onboarding
 
 From any hero detail page, use the clear **Change hero** button or the sticky header shortcut. The searchable hero picker defaults to the current role (Support, Damage, or Tank), with one-tap role tabs and an All filter. Selecting a different hero opens that hero's improvement goals directly. Practice completion and favorites are stored per hero and are not cleared; pressing Escape, Cancel, or the backdrop keeps the current hero. The quick-switch JavaScript and CSS are maintained as separate relative assets and re-linked on each automated patch rebuild.
+
+## Compact centered desktop navigation
+
+The old full-height sidebar is now a short, fixed navigation card centered on the left edge of the desktop viewport. Its buttons remain at least 44px tall, and the page continues to scroll independently. Intermediate tablet widths use a centered icon rail; screens up to 680px retain the existing bottom navigation. The old static sidebar patch notice is hidden in favor of the up-to-date per-hero patch accuracy information. Automated desktop, tablet, and mobile checks verify center alignment, clickable navigation and no horizontal overlap.

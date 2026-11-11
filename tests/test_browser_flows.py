@@ -309,6 +309,55 @@ class BrowserJourneys(unittest.TestCase):
                 page.locator('[data-help-group="practice"]').click()
                 self.assertTrue(page.locator('[data-practice-task]').first.is_checked())
 
+    def test_compact_middle_sidebar_and_reachable_navigation(self):
+        """Desktop navigation is compact and centered; mobile navigation stays at bottom."""
+        for device in DEVICES:
+            with self.subTest(device=device):
+                page = self.open_page(device)
+                self.open_hero(page)
+                bounds = page.evaluate("""() => {
+                  const s = document.querySelector('.sidebar').getBoundingClientRect();
+                  const m = document.querySelector('.main').getBoundingClientRect();
+                  return {top: s.top, bottom: s.bottom, left: s.left, width: s.width,
+                          height: s.height, mid: s.top + s.height / 2,
+                          mainLeft: m.left, viewportHeight: innerHeight,
+                          docWidth: document.documentElement.scrollWidth,
+                          viewportWidth: innerWidth, position: getComputedStyle(document.querySelector('.sidebar')).position};
+                }""")
+                self.assertEqual(bounds['position'], 'fixed')
+                self.assertLessEqual(bounds['docWidth'], bounds['viewportWidth'] + 2)
+                if device == 'desktop':
+                    self.assertLess(bounds['height'], bounds['viewportHeight'] * 0.65)
+                    self.assertLess(abs(bounds['mid'] - bounds['viewportHeight'] / 2), 8)
+                    self.assertGreater(bounds['mainLeft'], bounds['left'] + bounds['width'] + 5)
+                else:
+                    self.assertGreater(bounds['bottom'], bounds['viewportHeight'] - 24)
+                page.locator('.nav-btn[data-view="patches"]').click()
+                self.assertTrue(page.locator('#patches-view.active').is_visible())
+                page.locator('.nav-btn[data-view="compare"]').click()
+                self.assertTrue(page.locator('#compare-view.active').is_visible())
+                page.locator('.nav-btn[data-view="launch"]').click()
+                self.assertTrue(page.locator('#launch-view.active').is_visible())
+
+        tablet = self.browser.new_context(viewport={'width': 820, 'height': 900}, reduced_motion='reduce')
+        self.addCleanup(tablet.close)
+        page = self.open_page('desktop', context=tablet)
+        self.open_hero(page)
+        metrics = page.evaluate("""() => {
+            const s=document.querySelector('.sidebar').getBoundingClientRect();
+            const m=document.querySelector('.main').getBoundingClientRect();
+            return {mid:s.top+s.height/2,height:s.height,width:s.width,
+                    mainLeft:m.left,edge:s.right,
+                    doc:document.documentElement.scrollWidth,viewport:innerWidth};
+        }""")
+        self.assertLess(abs(metrics['mid'] - 450), 8)
+        self.assertLess(metrics['height'], 420)
+        self.assertLess(metrics['width'], 85)
+        self.assertGreater(metrics['mainLeft'], metrics['edge'] + 10)
+        self.assertLessEqual(metrics['doc'], metrics['viewport'] + 2)
+        page.locator('.nav-btn[data-view="patches"]').click()
+        self.assertTrue(page.locator('#patches-view.active').is_visible())
+
 
 if __name__ == '__main__':
     unittest.main(verbosity=2)

@@ -1,0 +1,96 @@
+/* Hero Lab | Compact, vertically centered primary navigation.
+   This enhancement is deliberately desktop/tablet-only: mobile retains its
+   established bottom navigation bar and launch-mode hides navigation. */
+@media (min-width: 981px) {
+  body:not(.launch-mode) .app-shell {
+    grid-template-columns: 225px minmax(0, 1fr);
+    gap: 14px;
+  }
+}
+@media (min-width: 681px) {
+  body:not(.launch-mode) .main {
+    grid-column: 2;
+  }
+  body:not(.launch-mode) .sidebar {
+    position: fixed;
+    top: 50dvh;
+    left: max(18px, calc((100vw - 1680px) / 2 + 18px));
+    transform: translateY(-50%);
+    width: 210px;
+    height: auto;
+    max-height: calc(100dvh - 32px);
+    box-sizing: border-box;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    z-index: 18;
+    padding: 14px;
+    gap: 13px;
+    border-radius: 24px;
+  }
+  body:not(.launch-mode) .sidebar .brand {
+    padding: 2px;
+    gap: 9px;
+  }
+  body:not(.launch-mode) .sidebar .brand-mark {
+    width: 42px;
+    height: 42px;
+    min-width: 42px;
+    border-radius: 13px;
+  }
+  body:not(.launch-mode) .sidebar .brand h1 {
+    font-size: 18px;
+  }
+  body:not(.launch-mode) .sidebar .brand p {
+    font-size: 10px;
+  }
+  body:not(.launch-mode) .sidebar .nav {
+    display: grid;
+    gap: 7px;
+    height: auto;
+  }
+  body:not(.launch-mode) .sidebar .nav-btn {
+    width: 100%;
+    min-height: 44px;
+    padding: 8px 10px 8px 43px;
+    border-radius: 13px;
+  }
+  body:not(.launch-mode) .sidebar .nav-btn:focus-visible {
+    outline: 3px solid #24624b;
+    outline-offset: 2px;
+  }
+  /* The old patch note is both stale and spaced far from the navigation.
+     The current per-hero Patch Accuracy card is the authoritative status. */
+  body:not(.launch-mode) .sidebar .sidebar-note {
+    display: none;
+  }
+}
+@media (min-width: 681px) and (max-width: 980px) {
+  body:not(.launch-mode) .sidebar {
+    left: 10px;
+    width: 66px;
+    padding: 10px 7px;
+    gap: 10px;
+    border-radius: 19px;
+  }
+  body:not(.launch-mode) .sidebar .brand {
+    padding: 0;
+    justify-content: center;
+  }
+  body:not(.launch-mode) .sidebar .brand-mark {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+  }
+  body:not(.launch-mode) .sidebar .nav-btn {
+    min-height: 44px;
+    padding: 8px;
+    display: grid;
+    place-items: center;
+    font-size: 0;
+  }
+  body:not(.launch-mode) .sidebar .nav-btn::before {
+    position: static;
+    transform: none;
+  }
+}
+/* Intentional: at <= 680px the app's existing bottom navigation wins. */
