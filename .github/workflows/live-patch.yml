@@ -42,6 +42,9 @@ jobs:
         run: |
           node scripts/check_html.cjs
           node --check site/trust-ui.js
+          node --check site/hero-switch.js
+          grep -q 'id="hero-switch-script"' site/index.html
+          grep -q 'id="hero-switch-styles"' site/index.html
       - name: Install Chromium for regression tests
         run: python -m playwright install --with-deps chromium
       - name: Desktop and mobile browser regression gate

@@ -260,6 +260,55 @@ class BrowserJourneys(unittest.TestCase):
                 self.assertEqual(page.locator('#trust-hero-list .trust-hero-row').count(), 1)
                 self.assertIn('Mizuki', page.locator('#trust-hero-list').inner_text())
 
+    def test_quick_switch_current_role_and_cross_role(self):
+        """Switch hero without restarting role onboarding, on desktop and mobile."""
+        for device in DEVICES:
+            with self.subTest(device=device):
+                page = self.open_page(device)
+                self.open_hero(page, 'Mizuki', 'Support')
+                self.assertTrue(page.locator('#hero-switch-top').is_visible())
+                page.locator('#back-to-heroes').click()
+                self.assertTrue(page.locator('#hero-switch-dialog').is_visible())
+                self.assertEqual(page.locator('.hero-switch-role.is-active').inner_text(), 'Support')
+                self.assertTrue(page.locator('#hero-switch-search').evaluate('(el) => document.activeElement === el'))
+                page.locator('#hero-switch-search').fill('Juno')
+                page.locator('button[data-hero-name="Juno"]').click()
+                self.assertTrue(page.locator('#hero-switch-dialog').is_hidden())
+                self.assertEqual(page.locator('#hero-detail .hero-calm-name h2').inner_text(), 'Juno')
+                self.assertTrue(page.locator('#goal-picker').is_visible())
+                page.locator('#hero-switch-top').click()
+                page.locator('button.hero-switch-role[data-role="Damage"]').click()
+                page.locator('#hero-switch-search').fill('Genji')
+                page.locator('button[data-hero-name="Genji"]').click()
+                self.assertEqual(page.locator('#hero-detail .hero-calm-name h2').inner_text(), 'Genji')
+                page.locator('#back-to-heroes').click()
+                page.keyboard.press('Escape')
+                self.assertTrue(page.locator('#hero-switch-dialog').is_hidden())
+                self.assertEqual(page.locator('#hero-detail .hero-calm-name h2').inner_text(), 'Genji')
+
+    def test_quick_switch_search_empty_close_and_saved_progress(self):
+        """Switching heroes does not discard the previously saved hero's practice."""
+        for device in DEVICES:
+            with self.subTest(device=device):
+                page = self.open_page(device)
+                self.open_hero(page, 'Mizuki', 'Support')
+                page.locator('[data-help-group="practice"]').click()
+                self.assertGreater(page.locator('[data-practice-task]').count(), 0)
+                page.locator('[data-practice-task]').first.check()
+                page.locator('#back-to-heroes').click()
+                page.locator('#hero-switch-search').fill('not-a-real-hero')
+                self.assertIn('No heroes match', page.locator('#hero-switch-results').inner_text())
+                page.locator('#hero-switch-close').click()
+                self.assertTrue(page.locator('#hero-switch-dialog').is_hidden())
+                page.locator('#hero-switch-top').click()
+                page.locator('#hero-switch-search').fill('Juno')
+                page.locator('button[data-hero-name="Juno"]').click()
+                page.locator('#back-to-heroes').click()
+                page.locator('#hero-switch-search').fill('Mizuki')
+                page.locator('button[data-hero-name="Mizuki"]').click()
+                page.locator('[data-help-group="practice"]').click()
+                self.assertTrue(page.locator('[data-practice-task]').first.is_checked())
+
 
 if __name__ == '__main__':
     unittest.main(verbosity=2)

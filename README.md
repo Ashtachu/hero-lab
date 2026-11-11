@@ -46,3 +46,7 @@ The official source is `https://overwatch.blizzard.com/en-us/news/patch-notes/`.
 - Unknown heroes and Stadium/6v6 notes are not silently mapped onto standard-mode hero stats. Repeat polls do not rewrite prior verification timestamps.
 - GitHub Actions has a final pipeline-health job. A failed build or deployment creates one assigned GitHub issue, updates that issue on subsequent failed runs, and closes it after full recovery. Turn on **GitHub issue assignment notifications** for the repository to receive these alerts by email or mobile. The old site stays live if the release gate fails.
 - The app does not yet include manual approval tooling for complex changes; those remain explicitly pending until reviewed and updated in the canonical source.
+
+## Switching heroes without restarting onboarding
+
+From any hero detail page, use the clear **Change hero** button or the sticky header shortcut. The searchable hero picker defaults to the current role (Support, Damage, or Tank), with one-tap role tabs and an All filter. Selecting a different hero opens that hero's improvement goals directly. Practice completion and favorites are stored per hero and are not cleared; pressing Escape, Cancel, or the backdrop keeps the current hero. The quick-switch JavaScript and CSS are maintained as separate relative assets and re-linked on each automated patch rebuild.

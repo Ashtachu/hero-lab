@@ -212,6 +212,11 @@ def write_site(db):
         updated=updated.replace('</head>', '<link id="hero-trust-styles" rel="stylesheet" href="./trust-ui.css">\n</head>', 1)
     if 'id="hero-trust-script"' not in updated:
         updated=updated.replace('</body>', '<script id="hero-trust-script" src="./trust-ui.js" defer></script>\n</body>', 1)
+    # Reintroduce the accessible hero quick-switch after every automatic DB rebuild.
+    if 'id="hero-switch-styles"' not in updated:
+        updated=updated.replace('</head>', '<link id="hero-switch-styles" rel="stylesheet" href="./hero-switch.css">\\n</head>', 1)
+    if 'id="hero-switch-script"' not in updated:
+        updated=updated.replace('</body>', '<script id="hero-switch-script" src="./hero-switch.js" defer></script>\\n</body>', 1)
     path.write_text(updated)
 
 def main():
