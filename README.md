@@ -9,7 +9,7 @@ This project packages the existing Hero Lab static HTML together with a **server
 3. **Change validation:** Approves only exact standard-mode base hero health/armor/shields changes when the recorded old value matches the verified baseline. All other changes are held as `parsed_pending_validation` or `needs_review` and **not automatically applied**.
 4. **Derived stats:** Rebuilds the embedded database, updates safe hero stat rows and total HP where all components are numeric. Existing damage, breakpoint and TTK tools use the rebuilt database. Changes to complex ability/weapon stats require human verification and a database update; the pipeline **does not automatically recalculate unknown mechanics**.
 5. **Automatic rebuild:** `scripts/patch_engine.py` injects the audited snapshot back into `site/index.html`, maintaining the original UI.
-6. **Production deployment:** GitHub Actions runs tests, rebuilds and publishes to GitHub Pages. **Not active until repository is configured.**
+6. **Production deployment:** GitHub Actions runs tests, rebuilds and publishes to GitHub Pages. Active on the published GitHub Pages site; scheduled runs are subject to GitHub delays.
 7. **Hero follows:** Users choose followed heroes in the application. Follow preferences stay in local storage, and new notes appear on the next visit/refresh. Browser notifications can appear when opening the app with permission on HTTPS. True background push and cross-device follows are **not included**. Optionally configure a channel-wide Discord webhook for new notes.
 
 ## Enable deployment
@@ -34,6 +34,15 @@ python scripts/patch_engine.py --fixture tests/official_fixture.html --dry-run
 
 ## Review and safety
 
-The official source is `https://overwatch.blizzard.com/en-us/news/patch-notes/pc%20/`. It can change HTML structure; if parsing fails, scheduled deployment stops and previous published output remains in place. Every parsed text entry is retained with an explicit status. Unknown/new heroes, perk changes, Stadium-specific rules, mixed modes, and uncertain percentage changes remain pending. Human-reviewed changes should be incorporated into the canonical database and verified against live gameplay rules before modifying derived damage formulas.
+The official source is `https://overwatch.blizzard.com/en-us/news/patch-notes/`. It can change HTML structure; if parsing fails, scheduled deployment stops and previous published output remains in place. Every parsed text entry is retained with an explicit status. Unknown/new heroes, perk changes, Stadium-specific rules, mixed modes, and uncertain percentage changes remain pending. Human-reviewed changes should be incorporated into the canonical database and verified against live gameplay rules before modifying derived damage formulas.
 
 **Operational gaps:** A reliable production-grade service also needs metrics/alerts for repeated CI failures, a database/approval UI for complex mechanics, optional authentication and user subscriptions, a Web Push service worker and push backend, and a deployment rollback process. This package is a safe foundation rather than a claim those systems already exist.
+
+## Patch accuracy and pipeline alerts
+
+- Every hero now has a provenance card below their name: last *successful* official Blizzard page check, last verified stat record and its source (seeded reference versus approved official change), and count of unapplied notes awaiting review.
+- The Patch History view also has a searchable 53-hero status board, including an "awaiting review" filter.
+- Successful polls are **not** the same as independent verification of a hero's complete kit. The browser marks polls more than two hours old as overdue, rather than leaving a perpetual "current" indicator.
+- Unknown heroes and Stadium/6v6 notes are not silently mapped onto standard-mode hero stats. Repeat polls do not rewrite prior verification timestamps.
+- GitHub Actions has a final pipeline-health job. A failed build or deployment creates one assigned GitHub issue, updates that issue on subsequent failed runs, and closes it after full recovery. Turn on **GitHub issue assignment notifications** for the repository to receive these alerts by email or mobile. The old site stays live if the release gate fails.
+- The app does not yet include manual approval tooling for complex changes; those remain explicitly pending until reviewed and updated in the canonical source.

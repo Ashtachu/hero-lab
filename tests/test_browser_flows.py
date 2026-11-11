@@ -240,6 +240,26 @@ class BrowserJourneys(unittest.TestCase):
                 metrics = page.evaluate('({doc: document.documentElement.scrollWidth, viewport: window.innerWidth})')
                 self.assertLessEqual(metrics['doc'], metrics['viewport'] + 2, f'{device}: horizontal overflow {metrics}')
 
+    def test_hero_patch_provenance_and_review_board(self):
+        """Patch status must distinguish source polls from verified stat updates."""
+        for device in DEVICES:
+            with self.subTest(device=device):
+                page = self.open_page(device)
+                self.open_hero(page)
+                card = page.locator('#trust-hero-card')
+                card.wait_for(state='visible')
+                self.assertIn('Patch accuracy', card.inner_text())
+                self.assertIn('Last Blizzard check', card.inner_text())
+                self.assertIn('Last verified stats update', card.inner_text())
+                self.assertIn('Awaiting review', card.inner_text())
+                page.locator('.nav-btn[data-view="patches"]').click()
+                board = page.locator('#trust-board')
+                board.wait_for(state='visible')
+                self.assertIn('Patch accuracy by hero', board.inner_text())
+                page.locator('#trust-search').fill('Mizuki')
+                self.assertEqual(page.locator('#trust-hero-list .trust-hero-row').count(), 1)
+                self.assertIn('Mizuki', page.locator('#trust-hero-list').inner_text())
+
 
 if __name__ == '__main__':
     unittest.main(verbosity=2)

@@ -34,12 +34,14 @@ jobs:
           python-version: '3.11'
           cache: pip
       - run: pip install -r requirements.txt
-      - name: Patch parser and validation unit tests
-        run: python -m unittest discover -s tests -p 'test_patch_engine.py' -v
+      - name: Patch parser, provenance, and validation unit tests
+        run: python -m unittest discover -s tests -p 'test_*engine.py' -v
       - name: Poll official Blizzard notes / validate / rebuild
         run: python scripts/patch_engine.py
       - name: Verify generated JavaScript
-        run: node scripts/check_html.cjs
+        run: |
+          node scripts/check_html.cjs
+          node --check site/trust-ui.js
       - name: Install Chromium for regression tests
         run: python -m playwright install --with-deps chromium
       - name: Desktop and mobile browser regression gate
@@ -77,3 +79,63 @@ jobs:
       - name: Deploy validated static site
         id: deploy
         uses: actions/deploy-pages@v5
+
+  pipeline-health:
+    name: Monitor patch-pipeline health
+    if: ${{ always() }}
+    needs: [verify-and-build, production-deploy]
+    runs-on: ubuntu-24.04
+    permissions:
+      issues: write
+    steps:
+      - name: Alert on failure and acknowledge recovery
+        uses: actions/github-script@v9
+        env:
+          VERIFY_RESULT: ${{ needs.verify-and-build.result }}
+          DEPLOY_RESULT: ${{ needs.production-deploy.result }}
+        with:
+          retries: 2
+          script: |
+            const {owner, repo} = context.repo;
+            const title = 'Hero Lab patch pipeline failure';
+            const {data: items} = await github.rest.issues.listForRepo({
+              owner, repo, state: 'open', per_page: 100
+            });
+            const current = items.find(item => !item.pull_request && item.title === title);
+            const verified = process.env.VERIFY_RESULT;
+            const deployed = process.env.DEPLOY_RESULT;
+            const healthy = verified === 'success' && deployed === 'success';
+            const runUrl = 'https://github.com/' + owner + '/' + repo + '/actions/runs/' + context.runId;
+            if (!healthy) {
+              const body = [
+                '## Scheduled patch-pipeline attention required',
+                '',
+                'The latest automated Hero Lab run did not finish cleanly.',
+                'The existing published website is kept in place; the freshness badge becomes overdue if successful checks stop.',
+                '',
+                '- Build / patch check: **' + verified + '**',
+                '- Deployment: **' + deployed + '**',
+                '- Failed run: ' + runUrl,
+                '- Event: ' + context.eventName,
+                '',
+                'Open the run above and inspect the first failed step. This issue closes automatically after a successful run.'
+              ].join('\n');
+              if (current) {
+                await github.rest.issues.update({owner,repo,issue_number:current.number,body});
+                core.warning('Patch pipeline remains unhealthy: ' + runUrl);
+              } else {
+                await github.rest.issues.create({owner,repo,title,body,assignees:[owner]});
+                core.warning('Created an assigned patch-pipeline failure issue: ' + runUrl);
+              }
+            } else if (current) {
+              await github.rest.issues.createComment({
+                owner,repo,issue_number:current.number,
+                body:'Recovered: both build and Pages deployment passed. ' + runUrl
+              });
+              await github.rest.issues.update({
+                owner,repo,issue_number:current.number,state:'closed',state_reason:'completed'
+              });
+              core.info('Resolved the previous patch-pipeline failure issue.');
+            } else {
+              core.info('Patch pipeline healthy. No open incident issue.');
+            }
