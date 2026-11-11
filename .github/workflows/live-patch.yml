@@ -6,6 +6,7 @@ on:
   push:
     branches: [main]
     paths:
+      - 'requirements.txt'
       - 'scripts/**'
       - 'tests/**'
       - 'state/**'
@@ -20,7 +21,8 @@ concurrency:
   cancel-in-progress: false
 jobs:
   verify-and-build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
     outputs:
       new_count: ${{ steps.events.outputs.new_count }}
     steps:
@@ -32,12 +34,16 @@ jobs:
           python-version: '3.11'
           cache: pip
       - run: pip install -r requirements.txt
-      - name: Unit tests
-        run: python -m unittest discover -s tests -v
+      - name: Patch parser and validation unit tests
+        run: python -m unittest discover -s tests -p 'test_patch_engine.py' -v
       - name: Poll official Blizzard notes / validate / rebuild
         run: python scripts/patch_engine.py
-      - name: Verify generated JavaScript if Node available
+      - name: Verify generated JavaScript
         run: node scripts/check_html.cjs
+      - name: Install Chromium for regression tests
+        run: python -m playwright install --with-deps chromium
+      - name: Desktop and mobile browser regression gate
+        run: python -m unittest discover -s tests -p 'test_browser_flows.py' -v
       - name: Count new changes
         id: events
         shell: bash
