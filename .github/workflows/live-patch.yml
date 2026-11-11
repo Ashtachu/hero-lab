@@ -26,10 +26,10 @@ jobs:
     outputs:
       new_count: ${{ steps.events.outputs.new_count }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           persist-credentials: true
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: '3.11'
           cache: pip
@@ -63,8 +63,8 @@ jobs:
             git commit -m 'chore: refresh official patch snapshot [skip ci]'
             git push
           fi
-      - uses: actions/configure-pages@v5
-      - uses: actions/upload-pages-artifact@v3
+      - uses: actions/configure-pages@v6
+      - uses: actions/upload-pages-artifact@v5
         with:
           path: site
   production-deploy:
@@ -72,8 +72,8 @@ jobs:
     environment:
       name: github-pages
       url: ${{ steps.deploy.outputs.page_url }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Deploy validated static site
         id: deploy
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
