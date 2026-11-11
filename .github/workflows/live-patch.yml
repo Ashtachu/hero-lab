@@ -46,6 +46,8 @@ jobs:
           grep -q 'id="hero-switch-script"' site/index.html
           grep -q 'id="hero-switch-styles"' site/index.html
           grep -q 'id="compact-sidebar-styles"' site/index.html
+          grep -q 'id="compact-topbar-styles"' site/index.html
+          test -s site/compact-topbar.css
       - name: Install Chromium for regression tests
         run: python -m playwright install --with-deps chromium
       - name: Desktop and mobile browser regression gate

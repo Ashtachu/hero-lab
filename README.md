@@ -54,3 +54,7 @@ From any hero detail page, use the clear **Change hero** button or the sticky he
 ## Compact centered desktop navigation
 
 The old full-height sidebar is now a short, fixed navigation card centered on the left edge of the desktop viewport. Its buttons remain at least 44px tall, and the page continues to scroll independently. Intermediate tablet widths use a centered icon rail; screens up to 680px retain the existing bottom navigation. The old static sidebar patch notice is hidden in favor of the up-to-date per-hero patch accuracy information. Automated desktop, tablet, and mobile checks verify center alignment, clickable navigation and no horizontal overlap.
+
+## Floating top navigation
+
+The post-onboarding header now sits below the top edge in a centered, max-width floating card, with its controls grouped close to the hero title. It stays sticky while scrolling so Search, Follow heroes and Change hero remain reachable. On desktop the bar starts roughly 9vh lower than the top boundary; tablet uses a compact wrapping bar and mobile retains its bottom navigation while receiving a smaller two-row header below the phone's safe area. The CSS is kept in site/compact-topbar.css and reinjected automatically during patch builds. The browser release gate checks the header's position, control bounds, sticky behavior, and hero-switch/follow actions at desktop, mobile, and tablet widths.

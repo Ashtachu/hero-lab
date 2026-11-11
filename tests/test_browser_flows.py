@@ -358,6 +358,72 @@ class BrowserJourneys(unittest.TestCase):
         page.locator('.nav-btn[data-view="patches"]').click()
         self.assertTrue(page.locator('#patches-view.active').is_visible())
 
+    def test_lower_centered_topbar_keeps_actions_reachable(self):
+        """Floating header stays within reach without crowding the content or mobile."""
+        for device in DEVICES:
+            with self.subTest(device=device):
+                page = self.open_page(device)
+                self.open_hero(page)
+                header = page.locator('.main > .topbar')
+                self.assertTrue(header.is_visible())
+                self.assertTrue(page.locator('#hero-switch-top').is_visible())
+                self.assertTrue(page.locator('#hero-follow-trigger').is_visible())
+                geometry = page.evaluate("""() => {
+                    function rect(selector) {
+                        const b = document.querySelector(selector).getBoundingClientRect();
+                        return {left:b.left,right:b.right,top:b.top,bottom:b.bottom,
+                                width:b.width,height:b.height};
+                    }
+                    return {header:rect('.main > .topbar'),
+                            hero:rect('#hero-detail-view'),
+                            search:rect('.topbar-actions .search-wrap'),
+                            follow:rect('#hero-follow-trigger'),
+                            switcher:rect('#hero-switch-top'),
+                            viewport:innerWidth,doc:document.documentElement.scrollWidth};
+                }""")
+                h = geometry['header']
+                self.assertLessEqual(geometry['doc'], geometry['viewport'] + 2)
+                self.assertLessEqual(geometry['hero']['top'], h['bottom'] + 40)
+                self.assertGreaterEqual(geometry['hero']['top'], h['bottom'] + 4)
+                for control in ['search', 'follow', 'switcher']:
+                    b = geometry[control]
+                    self.assertGreaterEqual(b['left'], h['left'] - 3)
+                    self.assertLessEqual(b['right'], h['right'] + 3)
+                if device == 'desktop':
+                    self.assertGreater(h['top'], 50)
+                    self.assertLess(h['top'], 160)
+                    self.assertLess(h['width'], 970)
+                else:
+                    self.assertGreaterEqual(h['top'], 15)
+                    self.assertLess(h['top'], 60)
+                    self.assertLess(h['height'], 190)
+                page.locator('#hero-switch-top').click()
+                self.assertTrue(page.locator('#hero-switch-dialog').is_visible())
+                page.locator('#hero-switch-close').click()
+                self.assertTrue(page.locator('#hero-switch-dialog').is_hidden())
+                page.locator('#hero-follow-trigger').click()
+                self.assertTrue(page.locator('#live-follow-dialog').is_visible())
+                page.locator('#live-follow-close').click()
+                page.evaluate('window.scrollTo(0, 420)')
+                sticky_top = page.locator('.main > .topbar').evaluate('(el) => el.getBoundingClientRect().top')
+                self.assertGreaterEqual(sticky_top, -1)
+                self.assertLessEqual(sticky_top, 38)
+
+        tablet = self.browser.new_context(viewport={'width': 820, 'height': 900},
+                                          reduced_motion='reduce')
+        self.addCleanup(tablet.close)
+        page = self.open_page('desktop', context=tablet)
+        self.open_hero(page)
+        header = page.locator('.main > .topbar').bounding_box()
+        self.assertGreater(header['y'], 26)
+        self.assertLess(header['y'], 105)
+        self.assertLess(header['width'], 710)
+        self.assertLessEqual(page.evaluate('document.documentElement.scrollWidth'), 822)
+        page.locator('#hero-switch-top').click()
+        self.assertTrue(page.locator('#hero-switch-dialog').is_visible())
+        page.keyboard.press('Escape')
+        self.assertTrue(page.locator('#hero-switch-dialog').is_hidden())
+
 
 if __name__ == '__main__':
     unittest.main(verbosity=2)

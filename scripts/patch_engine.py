@@ -220,6 +220,9 @@ def write_site(db):
         updated=updated.replace('</head>', '<link id="hero-switch-styles" rel="stylesheet" href="./hero-switch.css">\n</head>', 1)
     if 'id="hero-switch-script"' not in updated:
         updated=updated.replace('</body>', '<script id="hero-switch-script" src="./hero-switch.js" defer></script>\n</body>', 1)
+    # Preserve the lower, centered floating header on each automated patch rebuild.
+    if 'id="compact-topbar-styles"' not in updated:
+        updated=updated.replace('</head>', '<link id="compact-topbar-styles" rel="stylesheet" href="./compact-topbar.css">\n</head>', 1)
     path.write_text(updated)
 
 def main():
