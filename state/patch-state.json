@@ -46,32 +46,6 @@
     },
     {
       "patch_date": "2026-11-03",
-      "hero": "Cassidy",
-      "ability": null,
-      "text": "Damage increased to 60 (Up from 50).",
-      "game_mode": "standard",
-      "status": "parsed_pending_validation",
-      "metric": "Damage",
-      "old_value": 50.0,
-      "new_value": 60.0,
-      "id": "da6b3df13687fc78",
-      "validation_reason": "Not safe for direct stat mapping; requires manual review"
-    },
-    {
-      "patch_date": "2026-11-03",
-      "hero": "Junker Queen",
-      "ability": null,
-      "text": "Base health increased from 450 to 500. (6v6)",
-      "game_mode": "standard",
-      "status": "parsed_pending_validation",
-      "metric": "Base health",
-      "old_value": 450.0,
-      "new_value": 500.0,
-      "id": "d9a5dd6ec7b48ad8",
-      "validation_reason": "Baseline 525 != documented old 450; review history"
-    },
-    {
-      "patch_date": "2026-11-03",
       "hero": "Hanzo",
       "ability": null,
       "text": "No longer overrides Sombra's hacked health packs.",
@@ -90,12 +64,47 @@
     },
     {
       "patch_date": "2026-11-03",
+      "hero": "Vendetta",
+      "ability": null,
+      "text": "Lifesteal reduced to 3% (Down from 4%).",
+      "game_mode": "stadium",
+      "status": "parsed_pending_validation",
+      "metric": "Lifesteal",
+      "old_value": 4.0,
+      "new_value": 3.0,
+      "id": "b954d8d933ce6992",
+      "validation_reason": "Not safe for direct stat mapping; requires manual review"
+    },
+    {
+      "patch_date": "2026-11-03",
+      "hero": "Genji",
+      "ability": null,
+      "text": "Swift Strike Damage per stack increased to 15% (Up from 10%).",
+      "game_mode": "stadium",
+      "status": "parsed_pending_validation",
+      "metric": "Swift Strike Damage per stack",
+      "old_value": 10.0,
+      "new_value": 15.0,
+      "id": "b836f0933b5e7f3b",
+      "validation_reason": "Not safe for direct stat mapping; requires manual review"
+    },
+    {
+      "patch_date": "2026-11-03",
       "hero": "Sombra",
       "ability": null,
       "text": "Now overrides enemy hack effects on health packs.",
       "game_mode": "standard",
       "status": "needs_review",
       "id": "b3339f31dd39eba7"
+    },
+    {
+      "patch_date": "2026-11-03",
+      "hero": "Winston",
+      "ability": null,
+      "text": "Tesla Field damage reduced to 30 every 1s (Down from 40).",
+      "game_mode": "stadium",
+      "status": "needs_review",
+      "id": "b03426bd2d4b34fe"
     },
     {
       "patch_date": "2026-11-03",
@@ -110,20 +119,8 @@
       "id": "ae0f7a1f9e353640",
       "stat_key": "health",
       "scope": "hero",
-      "validation_reason": "Exact metric and baseline matched"
-    },
-    {
-      "patch_date": "2026-11-03",
-      "hero": "Genji",
-      "ability": null,
-      "text": "Swift Strike Damage per stack increased to 15% (Up from 10%).",
-      "game_mode": "standard",
-      "status": "parsed_pending_validation",
-      "metric": "Swift Strike Damage per stack",
-      "old_value": 10.0,
-      "new_value": 15.0,
-      "id": "ad2dc5145fa0cdd5",
-      "validation_reason": "Not safe for direct stat mapping; requires manual review"
+      "validation_reason": "Exact metric and baseline matched",
+      "verified_at": "2026-11-11T09:48:06Z"
     },
     {
       "patch_date": "2026-11-03",
@@ -290,7 +287,8 @@
       "id": "92365d5075bd8da3",
       "stat_key": "health",
       "scope": "hero",
-      "validation_reason": "Exact metric and baseline matched"
+      "validation_reason": "Exact metric and baseline matched",
+      "verified_at": "2026-11-11T09:48:06Z"
     },
     {
       "patch_date": "2026-11-03",
@@ -326,6 +324,15 @@
       "new_value": 0.65,
       "id": "817ee1c5f52e5695",
       "validation_reason": "Not safe for direct stat mapping; requires manual review"
+    },
+    {
+      "patch_date": "2026-11-03",
+      "hero": "Sojourn",
+      "ability": null,
+      "text": "Damage increased to 10% reduced damage (Up from 25% reduced).",
+      "game_mode": "stadium",
+      "status": "needs_review",
+      "id": "7ecd3af8bf080572"
     },
     {
       "patch_date": "2026-11-03",
@@ -382,19 +389,6 @@
       "old_value": 100.0,
       "new_value": 125.0,
       "id": "6b4869e359d1e024",
-      "validation_reason": "Not safe for direct stat mapping; requires manual review"
-    },
-    {
-      "patch_date": "2026-11-03",
-      "hero": "Vendetta",
-      "ability": null,
-      "text": "Eliminations per increased stack of Onslaught increased to 3 (Up from 2).",
-      "game_mode": "standard",
-      "status": "parsed_pending_validation",
-      "metric": "Eliminations per increased stack of Onslaught",
-      "old_value": 2.0,
-      "new_value": 3.0,
-      "id": "5e0761eb83449f9c",
       "validation_reason": "Not safe for direct stat mapping; requires manual review"
     },
     {
@@ -508,24 +502,28 @@
     },
     {
       "patch_date": "2026-11-03",
-      "hero": "Sojourn",
+      "hero": "Vendetta",
       "ability": null,
-      "text": "Damage increased to 10% reduced damage (Up from 25% reduced).",
-      "game_mode": "standard",
-      "status": "needs_review",
-      "id": "39a325f13aed7ba4"
+      "text": "Eliminations per increased stack of Onslaught increased to 3 (Up from 2).",
+      "game_mode": "stadium",
+      "status": "parsed_pending_validation",
+      "metric": "Eliminations per increased stack of Onslaught",
+      "old_value": 2.0,
+      "new_value": 3.0,
+      "id": "46b8d34dd3bda808",
+      "validation_reason": "Not safe for direct stat mapping; requires manual review"
     },
     {
       "patch_date": "2026-11-03",
-      "hero": "Vendetta",
+      "hero": "Cassidy",
       "ability": null,
-      "text": "Lifesteal reduced to 3% (Down from 4%).",
-      "game_mode": "standard",
+      "text": "Damage increased to 60 (Up from 50).",
+      "game_mode": "stadium",
       "status": "parsed_pending_validation",
-      "metric": "Lifesteal",
-      "old_value": 4.0,
-      "new_value": 3.0,
-      "id": "373e02e5024d6a67",
+      "metric": "Damage",
+      "old_value": 50.0,
+      "new_value": 60.0,
+      "id": "38dc0b1aa8681c4e",
       "validation_reason": "Not safe for direct stat mapping; requires manual review"
     },
     {
@@ -582,30 +580,12 @@
     },
     {
       "patch_date": "2026-11-03",
-      "hero": "Winston",
-      "ability": null,
-      "text": "Tesla Field damage reduced to 30 every 1s (Down from 40).",
-      "game_mode": "standard",
-      "status": "needs_review",
-      "id": "1da348544e339cef"
-    },
-    {
-      "patch_date": "2026-11-03",
       "hero": "Emre",
       "ability": null,
       "text": "Fixed visual inconsistency regarding default reticle crosshairs not using Outline Thickness and Outline Shift values.",
       "game_mode": "standard",
       "status": "needs_review",
       "id": "1a61420f7ee07d30"
-    },
-    {
-      "patch_date": "2026-11-03",
-      "hero": "Cassidy",
-      "ability": null,
-      "text": "Damage increased to 50% reduced damage (Up from 60% reduced).",
-      "game_mode": "standard",
-      "status": "needs_review",
-      "id": "174220b6c4d2e185"
     },
     {
       "patch_date": "2026-11-03",
@@ -640,6 +620,19 @@
     },
     {
       "patch_date": "2026-11-03",
+      "hero": "Junker Queen",
+      "ability": null,
+      "text": "Base health increased from 450 to 500. (6v6)",
+      "game_mode": "6v6",
+      "status": "parsed_pending_validation",
+      "metric": "Base health",
+      "old_value": 450.0,
+      "new_value": 500.0,
+      "id": "0dbf2e2190367d7c",
+      "validation_reason": "Not safe for direct stat mapping; requires manual review"
+    },
+    {
+      "patch_date": "2026-11-03",
       "hero": "Jetpack Cat",
       "ability": null,
       "text": "Fuel regeneration rate reduced from 25% to 20% per second.",
@@ -650,6 +643,15 @@
       "new_value": 20.0,
       "id": "0a77aaf69a71ba6a",
       "validation_reason": "Not safe for direct stat mapping; requires manual review"
+    },
+    {
+      "patch_date": "2026-11-03",
+      "hero": "Cassidy",
+      "ability": null,
+      "text": "Damage increased to 50% reduced damage (Up from 60% reduced).",
+      "game_mode": "stadium",
+      "status": "needs_review",
+      "id": "06cfeeb7f63cad87"
     },
     {
       "patch_date": "2026-11-03",
@@ -665,8 +667,8 @@
       "validation_reason": "Not safe for direct stat mapping; requires manual review"
     }
   ],
-  "checked_at": "2026-11-11T09:48:06Z",
-  "source_url": "https://overwatch.blizzard.com/en-us/news/patch-notes/pc%20/",
+  "checked_at": "2026-11-11T17:08:20Z",
+  "source_url": "https://overwatch.blizzard.com/en-us/news/patch-notes/",
   "last_error": null,
   "latest_seen_date": "2026-11-05"
 }
