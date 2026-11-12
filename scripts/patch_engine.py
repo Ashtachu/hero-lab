@@ -228,6 +228,11 @@ def write_site(db):
         updated=updated.replace('</head>', '<link id="workspace-v2-styles" rel="stylesheet" href="./workspace-v2.css">\n</head>', 1)
     if 'id="workspace-v2-script"' not in updated:
         updated=updated.replace('</body>', '<script id="workspace-v2-script" src="./workspace-v2.js" defer></script>\n</body>', 1)
+    # Restore the plain-language hero routes and complete learning overview each build.
+    if 'id="learning-routes-styles"' not in updated:
+        updated=updated.replace('</head>', '<link id="learning-routes-styles" rel="stylesheet" href="./learning-routes.css">\n</head>', 1)
+    if 'id="learning-routes-script"' not in updated:
+        updated=updated.replace('</body>', '<script id="learning-routes-script" src="./learning-routes.js" defer></script>\n</body>', 1)
     path.write_text(updated)
 
 def main():

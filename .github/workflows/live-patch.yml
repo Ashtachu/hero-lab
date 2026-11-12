@@ -52,6 +52,10 @@ jobs:
           grep -q 'id="workspace-v2-script"' site/index.html
           node --check site/workspace-v2.js
           test -s site/workspace-v2.css
+          node --check site/learning-routes.js
+          test -s site/learning-routes.css
+          grep -q 'id="learning-routes-styles"' site/index.html
+          grep -q 'id="learning-routes-script"' site/index.html
       - name: Install Chromium for regression tests
         run: python -m playwright install --with-deps chromium
       - name: Desktop and mobile browser regression gate

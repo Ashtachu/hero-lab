@@ -1,0 +1,59 @@
+/* Route labels and a practical one-click hero playbook. */
+#goal-picker .goal-btn {min-width:0;min-height:92px;align-items:center}
+#goal-picker .goal-btn strong {font-size:15px;line-height:1.25}
+#goal-picker .goal-btn small {font-size:12px;line-height:1.45;max-width:31ch}
+#goal-picker .goal-btn[data-help-group="learn"] {background:#e9f4eb;border-color:#91bfa2}
+#goal-picker .goal-btn[data-help-group="learn"]:hover {background:#dceee0}
+.learn-guide {display:grid;gap:14px;min-width:0;text-align:left;color:#294335}
+.learn-guide > * {min-width:0}
+.learn-intro {border-radius:17px;border:1px solid #c3dec9;background:linear-gradient(110deg,#ecf6ec,#f9fbf6);padding:17px 19px}
+.learn-eyebrow {display:block;text-transform:uppercase;letter-spacing:.1em;font-size:11px;font-weight:850;color:#4c7660}
+.learn-intro h3 {margin:5px 0 4px;font-size:25px;line-height:1.15;color:#204435}
+.learn-summary {margin:0 0 11px;color:#456255;font-size:13px}
+.learn-one-line {border-top:1px solid #cbded0;padding-top:12px}
+.learn-one-line strong {font-size:12px;color:#244b38}
+.learn-one-line p {font-size:13px;line-height:1.55;margin:5px 0 0}
+.learn-essentials,.learn-aim-grid,.learn-team-grid,.learn-matchup-columns {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.learn-section {border:1px solid #d3e2d6;background:#fffef9;border-radius:16px;padding:16px;min-width:0;box-shadow:0 2px 9px rgba(30,65,40,.035)}
+.learn-section-title {margin:0;color:#294d3b;font-size:18px;line-height:1.25}
+.learn-section-intro {font-size:12px;line-height:1.5;color:#577165;margin:5px 0 12px}
+.learn-fact {padding:10px 12px;border-radius:12px;background:#f5f9f4;border:1px solid #e0eae1;margin-top:8px}
+.learn-fact-label {display:block;font-size:11px;font-weight:850;color:#436958}
+.learn-fact p {font-size:12px;line-height:1.55;color:#364f43;margin:4px 0 0;overflow-wrap:anywhere}
+.learn-aim-grid > .learn-fact {margin:0}
+.learn-team {background:#f8faf7}
+.learn-team-card {background:#fff;border:1px solid #dbe5dc;border-radius:13px;padding:13px;min-width:0}
+.learn-team-card h5,.learn-matchup h5 {margin:0 0 5px;font-size:15px;color:#254937}
+.learn-team-card p {font-size:12px;line-height:1.45;color:#567060;margin:0 0 11px}
+.learn-team-members {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+.learn-team-member {border:1px solid #e0e7dd;border-radius:9px;padding:7px 8px;background:#f7faf7;min-width:0}
+.learn-team-member.is-you {border-color:#6da785;background:#e1f1e5}
+.learn-team-member strong,.learn-team-member small {display:block;overflow-wrap:anywhere}
+.learn-team-member strong {font-size:12px;color:#284d39}
+.learn-team-member small {font-size:10px;color:#5c7565;margin-top:2px}
+.learn-note,.learn-source,.learn-caution {font-size:11px;line-height:1.5;color:#566b5c;margin:12px 0 0}
+.learn-matchup-list {display:grid;gap:8px}
+.learn-matchup {border:1px solid #e0e8df;border-radius:11px;padding:10px 11px;background:#f9fbf8}
+.learn-favorable .learn-matchup {border-left:3px solid #77a989}
+.learn-danger .learn-matchup {border-left:3px solid #cb9d73}
+.learn-matchup-summary,.learn-matchup-approach {font-size:12px;line-height:1.5;margin:4px 0;color:#445d4e}
+.learn-matchup-approach {font-weight:600}
+.learn-explore {min-height:44px;border:1px solid #8aba9b;color:#22533a;background:#e6f2e9;border-radius:12px;font-weight:800;padding:10px 16px;cursor:pointer;justify-self:start}
+.learn-explore:hover {background:#d4eadb}
+.learn-explore:focus-visible {outline:3px solid #2e6e4c;outline-offset:2px}
+.learn-footer {border-top:1px solid #dfebe0;padding:0 3px 6px}
+.learn-caution {color:#7a531e;font-weight:650}
+@media (max-width: 780px) {
+  .learn-essentials,.learn-aim-grid,.learn-team-grid,.learn-matchup-columns {grid-template-columns:1fr}
+  .learn-guide {gap:10px}
+  .learn-intro,.learn-section {padding:13px}
+  .learn-intro h3 {font-size:21px}
+  #goal-picker .goal-btn {min-height:100px}
+}
+@media (max-width: 400px) {
+  .learn-team-members {grid-template-columns:1fr 1fr}
+  .learn-team-member strong {font-size:11px}
+  .learn-explore {width:100%;justify-self:stretch}
+}
+/* Existing layout styles force grid displays; hidden state must still win. */
+#goal-picker[hidden], #goal-active[hidden], #hero-help-answer[hidden], #topic-choices[hidden] {display:none!important}

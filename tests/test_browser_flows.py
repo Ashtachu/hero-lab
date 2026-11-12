@@ -458,7 +458,7 @@ class BrowserJourneys(unittest.TestCase):
                 self.assertGreaterEqual(metrics['floating']['left'], metrics['header']['left'] - 2)
                 self.assertLessEqual(metrics['floating']['right'], metrics['header']['right'] + 2)
                 if device == 'desktop':
-                    self.assertLess(metrics['firstGoal']['top'], 450)
+                    self.assertLess(metrics['firstGoal']['top'], 520)  # Top half of a 900px viewport, with room for header
                     self.assertEqual(metrics['gridCount'], 6)
                 else:
                     self.assertLess(metrics['firstGoal']['top'], 620)
@@ -475,6 +475,68 @@ class BrowserJourneys(unittest.TestCase):
                 self.assertLessEqual(page.evaluate('document.documentElement.scrollWidth'), width + 2)
                 self.assertTrue(page.locator('#hero-switch-top').is_visible())
                 self.assertTrue(page.locator('#power-open').is_visible())
+
+    def test_plain_language_player_goals_and_complete_learn_route(self):
+        """A first-time player reaches useful advice in one click; no extra submenu."""
+        expected = [
+            'Learn this hero', 'I keep getting eliminated',
+            'I want more impact', 'An enemy hero is giving me trouble',
+            'I want to practice'
+        ]
+        for device in DEVICES:
+            with self.subTest(device=device):
+                page = self.open_page(device)
+                self.open_hero(page, 'Mizuki', 'Support')
+                self.assertEqual(page.locator('#goal-picker [data-help-group] strong').all_inner_texts(), expected)
+                page.locator('#goal-picker [data-help-group="learn"]').click()
+                self.assertFalse(page.locator('#goal-picker').is_visible())
+                overview = page.locator('#learn-overview')
+                self.assertTrue(overview.is_visible())
+                self.assertEqual(overview.get_attribute('data-hero'), 'Mizuki')
+                headings = page.locator('#learn-overview .learn-section-title').all_inner_texts()
+                for heading in [
+                    'Where to position', 'Fight strategy', 'How to aim',
+                    'Team comps that fit', 'Heroes you can pressure',
+                    'Heroes who can punish you'
+                ]:
+                    self.assertIn(heading, headings)
+                text = overview.inner_text()
+                self.assertIn('Binding Chain', text)
+                self.assertIn('Spirit Glaive', text)
+                self.assertIn('Genji', overview.locator('.learn-danger').inner_text())
+                self.assertIn('Mauga', overview.locator('.learn-favorable').inner_text())
+                self.assertIn('not live win-rate rankings', text)
+                self.assertEqual(overview.locator('.learn-team-card').count(), 2)
+                for i in range(2):
+                    members = overview.locator('.learn-team-members').nth(i)
+                    self.assertEqual(members.locator('.learn-team-member').count(), 5)
+                    self.assertEqual(members.locator('.learn-team-member.is-you').count(), 1)
+                self.assertLessEqual(
+                    page.evaluate('document.documentElement.scrollWidth'),
+                    page.evaluate('window.innerWidth') + 2
+                )
+                page.locator('#learn-overview .learn-explore').click()
+                self.assertTrue(page.locator('#matchup-hero-search').is_visible())
+                page.locator('#change-goal').click()
+                self.assertTrue(page.locator('#goal-picker').is_visible())
+                page.locator('#goal-picker [data-help-group="fight"]').click()
+                self.assertTrue(page.locator('[data-help-topic="aim"]').is_visible())
+
+    def test_learning_guidance_updates_for_other_roles(self):
+        for role, name in [('Tank', 'D.Va'), ('Damage', 'Genji')]:
+            with self.subTest(role=role, hero=name):
+                page = self.open_page('desktop')
+                self.open_hero(page, name, role)
+                page.locator('#goal-picker [data-help-group="learn"]').click()
+                overview = page.locator('#learn-overview')
+                self.assertTrue(overview.is_visible())
+                self.assertEqual(overview.get_attribute('data-hero'), name)
+                self.assertEqual(overview.locator('.learn-team-card').count(), 2)
+                for i in range(2):
+                    members = overview.locator('.learn-team-members').nth(i)
+                    self.assertEqual(members.locator('.learn-team-member').count(), 5)
+                    self.assertEqual(members.locator('.learn-team-member.is-you strong').inner_text(), name)
+                self.assertGreater(overview.locator('.learn-matchup').count(), 0)
 
 
 if __name__ == '__main__':

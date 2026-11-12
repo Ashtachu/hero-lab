@@ -63,3 +63,12 @@ The post-onboarding header now sits below the top edge in a centered, max-width 
 ## Unified hero workspace (UX iteration)
 
 After role and hero selection, the app now shows a compact hero overview followed immediately by the five learning goals. This intentionally places the user's next action **above** detailed Blizzard verification, which remains fully readable beneath the goals. On desktop, the five options occupy a balanced three-over-two layout rather than one tall list. Mobile uses two columns (one on very narrow devices) without horizontal scrolling. The duplicate change-hero button is hidden; the visible topbar picker remains functional. Search & Tools is moved from a floating overlay into the topbar, preventing overlap with the mobile bottom navigation. The existing navigation and all functionality are preserved. These layout rules are in site/workspace-v2.css and site/workspace-v2.js; the patch engine ensures both are re-linked with each automatic rebuild. CI tests verify card order, responsive grid behavior, reachable buttons, and no overflow.
+
+
+## Plain-language hero goals and one-click learning playbook
+
+After selecting a role and hero, the player now sees five action-oriented goals: **Learn this hero**, **I keep getting eliminated**, **I want more impact**, **An enemy hero is giving me trouble**, and **I want to practice**. Existing underlying mechanics for survival, combat, matchup search and saved drills stay in place.
+
+Selecting **Learn this hero** opens the complete hero playbook immediately, without a second topic-selection menu: positioning, fight strategy and cooldown decisions, aim model and a starter drill, two five-hero team-shell examples, favorable matchups and threats with actionable advice. All gameplay guidance is drawn from the existing per-hero OW_DB guide, aimGuide, snapshot and reviewed matchup records. Team-shell examples are heuristic playstyle fits and are labeled as such, **not** patch-verified optimal lineups, meta rankings or live win rates. Matchup lists are selective; the button to explore any enemy opens the existing matchup tool. Pending official patch changes are surfaced rather than silently applied. The saved Today route still works, and changing heroes does not reset practice progress.
+
+Files: site/learning-routes.js and site/learning-routes.css. scripts/patch_engine.py re-adds the script and stylesheet on each official patch build. CI checks the assets and runs the desktop/mobile learning-route journeys.
