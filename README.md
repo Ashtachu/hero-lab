@@ -72,3 +72,12 @@ After selecting a role and hero, the player now sees five action-oriented goals:
 Selecting **Learn this hero** opens the complete hero playbook immediately, without a second topic-selection menu: positioning, fight strategy and cooldown decisions, aim model and a starter drill, two five-hero team-shell examples, favorable matchups and threats with actionable advice. All gameplay guidance is drawn from the existing per-hero OW_DB guide, aimGuide, snapshot and reviewed matchup records. Team-shell examples are heuristic playstyle fits and are labeled as such, **not** patch-verified optimal lineups, meta rankings or live win rates. Matchup lists are selective; the button to explore any enemy opens the existing matchup tool. Pending official patch changes are surfaced rather than silently applied. The saved Today route still works, and changing heroes does not reset practice progress.
 
 Files: site/learning-routes.js and site/learning-routes.css. scripts/patch_engine.py re-adds the script and stylesheet on each official patch build. CI checks the assets and runs the desktop/mobile learning-route journeys.
+
+
+## Who should I play? Team comp picker
+
+Choose a role, then click **Not sure which hero fits your team?** before choosing a hero. The same picker is available on the role-selection screen, on Today, and as the sixth goal on hero pages (**Help me pick a hero**). Choose your role, up to four teammates and five enemies in role-specific slots. Mirrors across teams are allowed, but duplicate hero assignments within one team are blocked. Unknown slots can remain blank. **Find my picks** shows three candidate heroes, why they fit the teammates, the relevant enemy-specific plan, and the likely trade-offs. **Learn [hero]** opens the selected hero's guide. **Load example** prepopulates Support alongside D.Va/Junkrat/Anran/Mercy against D.Va/Widowmaker/Soldier: 76/Mercy/Kiriko.
+
+The tool provides *editorial, rule-based playstyle-fit suggestions* derived from the 53-hero reviewed snapshot and limited matchup descriptions. It does not know live pick/win rates, account proficiency, map context, the exact enemy positioning or outcomes. Unreviewed patch changes never create counterfeit counter rankings; contradictory records are considered conditional. Results are starting points, not guaranteed counters.
+
+Implementation: site/team-pick.js and site/team-pick.css are linked by scripts/patch_engine.py during every successful Blizzard poll and rebuild. CI runs role, lineup, duplicate, missing-player, sample-matchup, desktop and mobile tests.

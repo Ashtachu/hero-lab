@@ -1,0 +1,95 @@
+/* Hero Lab | accessible, compact team selection and recommendation dialog */
+.team-pick-entry {
+  display:inline-flex;align-items:center;justify-content:center;min-height:44px;
+  margin:13px 0 0;padding:10px 16px;border:1.5px solid #8ebaa2;
+  background:#e8f4eb;color:#28543d;font:inherit;font-weight:800;font-size:14px;
+  border-radius:13px;cursor:pointer;text-align:center;max-width:100%;
+}
+.team-pick-entry:hover{background:#d4ebdd;border-color:#518e6d}
+#team-pick-entry-role{margin-top:16px;width:100%}
+#team-pick-entry-hero{margin:8px 0 12px;align-self:flex-start}
+.team-pick-entry-today{margin-top:12px;width:100%}
+#goal-picker .team-pick-goal{border:2px solid #8cb49a;background:#e8f5eb;color:#2e5942}
+#goal-picker .team-pick-goal:hover{background:#d9eee0}
+.team-pick-open{overflow:hidden}
+.team-pick-overlay{
+  position:fixed;inset:0;z-index:1200;padding:22px;display:grid;place-items:center;
+  background:rgba(15,33,26,.64);backdrop-filter:blur(3px)
+}
+.team-pick-overlay[hidden],#team-pick-results[hidden],#team-pick-inputs[hidden]{display:none!important}
+.team-pick-window{
+  box-sizing:border-box;width:min(880px,100%);max-width:100%;max-height:min(90dvh,910px);
+  overflow-y:auto;overscroll-behavior:contain;background:#fffdf7;color:#243e33;
+  border:1.5px solid #bfd9c6;border-radius:24px;padding:22px 24px;
+  box-shadow:0 28px 85px rgba(16,44,28,.28)
+}
+.team-pick-head{display:flex;justify-content:space-between;align-items:flex-start;gap:15px;padding-bottom:14px;border-bottom:1px solid #dae8da}
+.team-pick-overline{display:block;font-size:11px;font-weight:850;letter-spacing:.09em;color:#507f63;margin:0 0 6px}
+.team-pick-head h2{margin:0;font-size:clamp(22px,2.4vw,28px);line-height:1.15;color:#214534}
+.team-pick-head p{margin:7px 0 0;max-width:650px;font-size:13px;line-height:1.55;color:#486354}
+#team-pick-close{flex:0 0 42px;width:42px;height:42px;background:#eff5ee;color:#294c3a;border:1px solid #bfd2c2;border-radius:12px;font-size:19px;cursor:pointer}
+.team-pick-role{display:flex;gap:13px;flex-wrap:wrap;align-items:center;padding:16px 0 14px}
+.team-pick-role>strong{font-size:13px;white-space:nowrap}
+#team-pick-role-tabs{display:flex;gap:6px;flex-wrap:wrap}
+.team-pick-role-tab{min-height:42px;padding:9px 16px;border:1px solid #bed2c0;border-radius:11px;background:#f4f7f0;color:#395442;font:inherit;font-weight:800;font-size:13px;cursor:pointer}
+.team-pick-role-tab.is-active{background:#c7e6d4;border-color:#70ad88;color:#204936}
+.team-pick-easier{display:inline-flex;align-items:center;gap:7px;margin-left:auto;font-size:12px;font-weight:750;color:#496454;cursor:pointer}
+.team-pick-easier input{width:18px;height:18px;accent-color:#3f8060}
+.team-pick-sides{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.team-pick-side{min-width:0;background:#f5f9f3;border:1px solid #dae6d8;border-radius:17px;padding:15px}
+.team-pick-side-title{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.team-pick-side h3{margin:0;color:#244a37;font-size:17px}
+.team-pick-side-title span{font-size:12px;color:#527360;white-space:nowrap;font-weight:800}
+.team-pick-side>p{margin:6px 0 13px;font-size:12px;line-height:1.4;color:#5c7465}
+.team-pick-slots{display:grid;gap:10px}
+.team-pick-slot{display:grid;grid-template-columns:88px minmax(0,1fr);align-items:center;gap:10px;color:#486452;font-size:13px;font-weight:800;min-width:0}
+.team-pick-slot select{box-sizing:border-box;max-width:100%;width:100%;min-width:0;min-height:44px;padding:9px 10px;border:1.5px solid #b9d1bf;border-radius:10px;background:#fff;color:#214334;font:inherit;font-size:14px;font-weight:550;cursor:pointer}
+.team-pick-form-bottom{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-top:18px}
+#team-pick-validation{font-size:12px;color:#587360;line-height:1.4}
+#team-pick-validation.is-error{color:#9b352b;font-weight:800}
+.team-pick-controls{display:flex;flex-wrap:wrap;gap:8px;margin-left:auto}
+.team-pick-primary,.team-pick-quiet,.team-pick-use{min-height:44px;border-radius:11px;padding:10px 16px;font:inherit;font-size:13px;font-weight:850;cursor:pointer}
+.team-pick-primary,.team-pick-use{background:#2f6d4e;border:1.5px solid #2b6347;color:#fff}
+.team-pick-primary:hover,.team-pick-use:hover{background:#215c40}
+.team-pick-primary:disabled{opacity:.44;cursor:not-allowed}
+.team-pick-quiet{background:#f1f6ef;border:1px solid #bcd0bf;color:#365c44}
+.team-pick-result-head{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin:17px 0 5px}
+.team-pick-result-head h3{margin:0;font-size:19px;color:#214533}
+.team-pick-disclaimer{font-size:12px;line-height:1.5;color:#536b5b;margin:10px 0}
+#team-pick-cards{display:grid;gap:12px;margin-top:14px}
+.team-pick-result-card{border:1.5px solid #d0dfd0;border-radius:16px;padding:15px 17px;background:#f9faf6}
+.team-pick-result-card.best{border-color:#7fb49a;background:#edf7ee}
+.team-pick-card-head{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.team-pick-rank{font-size:11px;text-transform:uppercase;letter-spacing:.065em;color:#577a62;font-weight:900}
+.team-pick-card-head h4{font-size:20px;color:#214534;margin:3px 0}
+.team-pick-card-head p{margin:3px 0;font-size:12px;color:#54705d}
+.team-pick-use{flex:none;max-width:200px}
+.team-pick-reasons p{font-size:13px;line-height:1.5;margin:10px 0 0;color:#284b35}
+.team-pick-reasons p:before{content:'✓ ';font-weight:900;color:#327951}
+.team-pick-approach{border-top:1px solid #d7e5d8;padding-top:9px;margin:12px 0 6px;font-size:12px;line-height:1.5;color:#3b5846}
+.team-pick-tradeoff{margin:7px 0 0;font-size:12px;line-height:1.5;color:#6e5542}
+.team-pick-overlay button:focus-visible,.team-pick-overlay select:focus-visible,.team-pick-entry:focus-visible,.team-pick-goal:focus-visible{outline:3px solid #2b7a50;outline-offset:2px}
+@media (max-width:680px){
+ .team-pick-overlay{align-items:end;padding:0}
+ .team-pick-window{border-radius:22px 22px 0 0;border-bottom:0;padding:16px 14px max(16px,env(safe-area-inset-bottom));width:100%;max-height:94dvh}
+ .team-pick-head h2{font-size:22px}
+ .team-pick-head p{font-size:12px}
+ .team-pick-role{gap:8px;padding:12px 0}
+ #team-pick-role-tabs{width:100%;display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}
+ .team-pick-role-tab{padding:8px 6px}
+ .team-pick-easier{margin-left:0}
+ .team-pick-sides{grid-template-columns:1fr;gap:10px}
+ .team-pick-side{padding:12px}
+ .team-pick-slots{gap:6px}
+ .team-pick-slot{grid-template-columns:80px minmax(0,1fr);gap:7px}
+ .team-pick-slot select{min-height:42px}
+ .team-pick-form-bottom{display:block}
+ .team-pick-controls{justify-content:space-between;margin-top:12px}
+ .team-pick-controls button{flex:1;min-width:130px}
+ .team-pick-card-head{align-items:flex-start;flex-wrap:wrap}
+ .team-pick-use{width:100%;max-width:100%}
+ .team-pick-entry{font-size:13px}
+}
+@media (max-width:360px){.team-pick-slot{grid-template-columns:69px minmax(0,1fr)}.team-pick-slot select{font-size:12px}.team-pick-window{padding-left:10px;padding-right:10px}}
+/* Keep the close control accessible when the nine-slot form scrolls on phones. */
+.team-pick-head{position:sticky;top:-1px;z-index:3;background:#fffdf7}

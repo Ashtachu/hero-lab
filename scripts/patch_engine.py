@@ -233,6 +233,11 @@ def write_site(db):
         updated=updated.replace('</head>', '<link id="learning-routes-styles" rel="stylesheet" href="./learning-routes.css">\n</head>', 1)
     if 'id="learning-routes-script"' not in updated:
         updated=updated.replace('</body>', '<script id="learning-routes-script" src="./learning-routes.js" defer></script>\n</body>', 1)
+    # The team-based hero recommendation wizard must survive every patch build.
+    if 'id="team-pick-styles"' not in updated:
+        updated=updated.replace('</head>', '<link id="team-pick-styles" rel="stylesheet" href="./team-pick.css">\n</head>', 1)
+    if 'id="team-pick-script"' not in updated:
+        updated=updated.replace('</body>', '<script id="team-pick-script" src="./team-pick.js" defer></script>\n</body>', 1)
     path.write_text(updated)
 
 def main():

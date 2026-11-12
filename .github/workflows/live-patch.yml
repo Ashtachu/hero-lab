@@ -56,6 +56,10 @@ jobs:
           test -s site/learning-routes.css
           grep -q 'id="learning-routes-styles"' site/index.html
           grep -q 'id="learning-routes-script"' site/index.html
+          node --check site/team-pick.js
+          test -s site/team-pick.css
+          grep -q 'id="team-pick-styles"' site/index.html
+          grep -q 'id="team-pick-script"' site/index.html
       - name: Install Chromium for regression tests
         run: python -m playwright install --with-deps chromium
       - name: Desktop and mobile browser regression gate

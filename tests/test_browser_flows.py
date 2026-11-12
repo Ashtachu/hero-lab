@@ -538,6 +538,103 @@ class BrowserJourneys(unittest.TestCase):
                     self.assertEqual(members.locator('.learn-team-member.is-you strong').inner_text(), name)
                 self.assertGreater(overview.locator('.learn-matchup').count(), 0)
 
+    def test_team_pick_user_example_from_role_selection(self):
+        """No hero preselection needed: role -> team comps -> supported pick -> hero guide."""
+        for device in DEVICES:
+            with self.subTest(device=device):
+                page = self.open_page(device)
+                page.locator('[data-launch-role="Support"]').click()
+                page.locator('#team-pick-entry-hero').click()
+                dialog = page.locator('#team-pick-dialog')
+                self.assertTrue(dialog.is_visible())
+                self.assertEqual(page.locator('#team-pick-role-tabs [aria-pressed="true"]').inner_text(), 'Support')
+                page.locator('#team-pick-example').click()
+                self.assertEqual(page.locator('#team-pick-ally-count').inner_text(), '4 of 4')
+                self.assertEqual(page.locator('#team-pick-enemy-count').inner_text(), '5 of 5')
+                self.assertEqual(page.locator('#team-pick-allies select').nth(0).input_value(), 'D.Va')
+                self.assertEqual(page.locator('#team-pick-enemies select').nth(0).input_value(), 'D.Va')  # mirrors allowed
+                self.assertEqual(page.locator('#team-pick-enemies select').nth(1).input_value(), 'Widowmaker')
+                self.assertEqual(page.locator('#team-pick-enemies select').nth(2).input_value(), 'Soldier: 76')
+                page.locator('#team-pick-submit').click()
+                self.assertTrue(page.locator('#team-pick-results').is_visible())
+                self.assertIn('Widowmaker', page.locator('#team-pick-confidence').inner_text())
+                recs = page.locator('.team-pick-result-card')
+                self.assertEqual(recs.count(), 3)
+                names = page.locator('.team-pick-card-head h4').all_inner_texts()
+                self.assertEqual(names[0], 'Kiriko')
+                self.assertEqual(len(names), len(set(names)))
+                self.assertNotIn('Mercy', names)  # teammate cannot be picked twice
+                self.assertIn('Defense Matrix', recs.first.inner_text())
+                self.assertIn('Mercy', recs.first.inner_text())
+                self.assertIn('not live pick-rate', page.locator('#team-pick-results').inner_text())
+                self.assertLessEqual(page.evaluate('document.documentElement.scrollWidth'),
+                                     page.evaluate('window.innerWidth') + 2)
+                page.locator('[data-pick-hero="Kiriko"]').click()
+                self.assertTrue(page.locator('#hero-detail-view.active').is_visible())
+                self.assertIn('Kiriko', page.locator('#hero-detail .hero-calm-name').inner_text())
+                self.assertTrue(page.locator('#goal-picker .team-pick-goal').is_visible())
+                page.locator('#goal-picker .team-pick-goal').click()
+                self.assertTrue(dialog.is_visible())
+                page.keyboard.press('Escape')
+                self.assertTrue(dialog.is_hidden())
+
+    def test_team_pick_other_roles_partial_inputs_and_duplicate_validation(self):
+        """All roles supported; incomplete team is allowed; same-side duplicates blocked."""
+        for device in DEVICES:
+            with self.subTest(device=device):
+                page = self.open_page(device)
+                page.locator('#team-pick-entry-role').click()
+                page.locator('[data-pick-role="Damage"]').click()
+                self.assertEqual(page.locator('#team-pick-allies select').count(), 4)
+                page.locator('#team-pick-allies select').nth(0).select_option('D.Va')
+                page.locator('#team-pick-enemies select').nth(0).select_option('D.Va')
+                page.locator('#team-pick-enemies select').nth(1).select_option('Widowmaker')
+                page.locator('#team-pick-submit').click()
+                self.assertIn('Partial lineup', page.locator('#team-pick-confidence').inner_text())
+                names = page.locator('.team-pick-card-head h4').all_inner_texts()
+                self.assertEqual(len(names), 3)
+                self.assertTrue(page.evaluate(
+                    "(a) => a.every(n => window.OW_DB.heroes.find(h=>h.name===n)?.role==='Damage')", names
+                ))
+                page.locator('#team-pick-edit').click()
+                page.locator('[data-pick-role="Tank"]').click()
+                self.assertEqual(page.locator('#team-pick-allies select').nth(0).locator('option').count(),
+                                 page.evaluate("window.OW_DB.heroes.filter(h=>h.role==='Damage').length+1"))
+                page.locator('#team-pick-allies select').nth(0).select_option('Anran')
+                page.locator('#team-pick-allies select').nth(1).select_option('Anran')
+                self.assertTrue(page.locator('#team-pick-submit').is_disabled())
+                self.assertIn('cannot occupy two slots',page.locator('#team-pick-validation').inner_text())
+                page.locator('#team-pick-allies select').nth(1).select_option('Junkrat')
+                self.assertTrue(page.locator('#team-pick-submit').is_enabled())
+                page.locator('#team-pick-submit').click()
+                tank = page.locator('.team-pick-card-head h4').all_inner_texts()
+                self.assertEqual(len(tank),3)
+                self.assertTrue(page.evaluate(
+                    "(a) => a.every(n => window.OW_DB.heroes.find(h=>h.name===n)?.role==='Tank')", tank
+                ))
+                page.locator('#team-pick-close').click()
+                self.assertTrue(page.locator('#team-pick-dialog').is_hidden())
+
+    def test_team_pick_all_heroes_rank_without_unverified_counter_claims(self):
+        page = self.open_page('desktop')
+        names = page.evaluate("""() => {
+            const roster = window.OW_DB.heroes;
+            for (const role of ['Support','Damage','Tank']) {
+                const picks = window.HeroLabTeamFit.recommend(
+                    role, ['D.Va','Junkrat','Anran','Mercy'],
+                    ['D.Va','Widowmaker','Soldier: 76','Mercy','Kiriko']
+                );
+                if (picks.length !== 3 || new Set(picks).size !== 3)
+                    throw new Error('Invalid results for '+role);
+                if (picks.some(n=>roster.find(h=>h.name===n)?.role!==role))
+                    throw new Error('Cross-role recommendation '+role);
+            }
+            return window.HeroLabTeamFit.recommend('Support',
+                ['D.Va','Junkrat','Anran','Mercy'],
+                ['D.Va','Widowmaker','Soldier: 76','Mercy','Kiriko']);
+        }""")
+        self.assertEqual(names[0], 'Kiriko')
+
 
 if __name__ == '__main__':
     unittest.main(verbosity=2)
